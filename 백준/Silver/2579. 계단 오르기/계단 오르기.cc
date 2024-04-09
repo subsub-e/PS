@@ -9,7 +9,7 @@
 #include <queue>
 using namespace std;
 
-int dp[301][3];
+int dp[301];
 int arr[301];
 
 int main(){
@@ -17,19 +17,18 @@ int main(){
 	cin.tie(NULL); cout.tie(NULL);
 
     int n; cin >> n;
+    int sum = 0;
     for(int i = 1; i <= n; i++){
         cin >> arr[i];
+        sum += arr[i];
     }
     
-    dp[1][1] = arr[1];
-    dp[1][2] = 0;
-    dp[2][1] = arr[2];
-    dp[2][2] = arr[1] + arr[2];
-    for(int i = 3; i <= 300; i++){
-        dp[i][1] = max(dp[i-2][1], dp[i-2][2]) + arr[i];
-        dp[i][2] = dp[i-1][1] + arr[i];
+    dp[1] = arr[1];
+    dp[2] = arr[2];
+    dp[3] = arr[3];
+    for(int i = 4; i <= 300; i++){
+        dp[i] = arr[i] + min(dp[i - 2], dp[i - 3]);
     }
-
-    cout << max(dp[n][1], dp[n][2]);
+    cout << sum - min(dp[n - 1], dp[n - 2]);
 	return 0;
 }
