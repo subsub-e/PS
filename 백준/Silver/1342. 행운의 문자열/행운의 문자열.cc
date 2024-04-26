@@ -11,13 +11,14 @@
 #include <climits>
 using namespace std;
 
-int visited[27];
+int visited[26];
+bool visited2[26];
 string str;
 int cnt;
 
-void func(int now, string temp){
+void func(string temp){
     //cout << temp << '\n';
-    if(now == str.length()){
+    if(temp.length() == str.length()){
         cnt++;
         //cout << temp << '\n';
         return;
@@ -25,17 +26,12 @@ void func(int now, string temp){
 
     for(int i = 0; i < 26; i++){
         //cout << (int) temp[temp.length() - 1] - 'a' << '\n';
-        if(visited[i] == 0){
-            continue;
+        if(visited[i] > 0 && (int) temp[temp.length() - 1] - 'a' != i){
+            visited[i]--;
+            //cout << char(i + 'a') << '\n';
+            func(temp + char(i + 'a'));
+            visited[i]++;
         }
-        if(temp != "" && (int) temp[temp.length() - 1] - 'a' == i){
-            continue;
-        }
-        visited[i]--;
-        //cout << char(i + 'a') << '\n';
-        func(now + 1, temp + (char) (i + 'a'));
-        visited[i]++;
-        
     }
 }
 
@@ -45,12 +41,19 @@ int main() {
 	cout.tie(0);
 
 	cin >> str;
-
     for(int i = 0; i < str.length(); i++){
-        visited[str[i] - 'a']++;
+        visited[(int) str[i] - 'a']++;
     }
-
-    func(0, "");
+    for(int i = 0; i < str.length(); i++){
+        if(!visited2[(int) str[i] - 'a']){
+            string temp = "";
+            temp += str[i];
+            visited2[(int) str[i] - 'a'] = 1;
+            visited[(int) str[i] - 'a']--;
+            func(temp);
+            visited[(int) str[i] - 'a']++;
+        }
+    }
 
     cout << cnt;
 
