@@ -1,61 +1,69 @@
 #include <iostream>
+#include <algorithm>
+#include <queue>
 #include <stack>
 #include <string>
 using namespace std;
 
-int main(){
-    cin.tie(0);
+
+
+
+int main()
+{
     ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+
+    stack<char> left;
+    stack<char> right;
     string str;
     cin >> str;
-    int n; cin >> n;
-    stack<char> l;
-    stack<char> r;
-
     for(int i = 0; i < str.length(); i++){
-        l.push(str[i]);
+        left.push(str[i]);
     }
 
-    for(int i = 0; i < n; i++){
-        char c;
-        cin >> c;
+    int n; cin >> n;
+    while(n--){
+        char c; cin >> c;
         if(c == 'L'){
-            if(l.size() == 0){
+            if(left.empty()){
                 continue;
             }
-            r.push(l.top());
-            l.pop();
+            right.push(left.top());
+            left.pop();
         }
         else if(c == 'D'){
-            if(r.size() == 0){
+            if(right.empty()){
                 continue;
             }
-            l.push(r.top());
-            r.pop();
+            left.push(right.top());
+            right.pop();
         }
         else if(c == 'B'){
-            if(l.size() == 0){
+            if(left.empty()){
                 continue;
             }
-            l.pop();
+            left.pop();
         }
-        else if(c == 'P'){
-            char sub_c;
-            cin >> sub_c;
-            l.push(sub_c);
+        else{
+            char x; cin >> x;
+            left.push(x);
         }
     }
-    string ans = "";
-    while(!l.empty()){
-        ans += l.top();
-        l.pop();
+
+    string answer = "";
+    string answer1 = "";
+    while(!right.empty()){
+        answer += right.top();
+        right.pop();
     }
-    for(int i = ans.length() - 1; i >= 0; i--){
-        cout << ans[i];
+    while(!left.empty()){
+        answer1 += left.top();
+        left.pop();
     }
-    while(!r.empty()){
-        cout << r.top();
-        r.pop();
-    }
+
+    reverse(answer1.begin(), answer1.end());
+    cout << answer1 + answer;
+
     return 0;
 }
