@@ -1,39 +1,45 @@
 #include <iostream>
-#include <queue>
 #include <algorithm>
-#include <functional>
-
+#include <queue>
+#include <stack>
+#include <string>
+#include <unordered_map>
 using namespace std;
 
-int main(void) {
 
-	int n; cin >> n;
-    priority_queue<pair<long long, long long>, vector<pair<long long, long long> >, greater<pair<long long, long long> > > pq;
-    for(int i = 0; i < n; i++){
-        long long x; cin >> x;
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+
+    priority_queue<pair<int, int> , vector<pair<int, int> >, greater<pair<int, int> > > pq;
+    int n; cin >> n;
+    while(n--){
+        int x; cin >> x;
         if(x == 0){
             if(pq.empty()){
                 cout << 0 << '\n';
             }
             else{
-                long long temp = pq.top().first;
-                int flag = pq.top().second;
-                if(flag == 0){
-                    cout << -temp << '\n';
+                if(pq.top().second == 1){
+                    cout << -pq.top().first << '\n';
                 }
                 else{
-                    cout << temp << '\n';
+                    cout << pq.top().first << '\n';
                 }
                 pq.pop();
             }
         }
         else{
             if(x > 0){
-                pq.push(make_pair(x, 1));
+                pq.push(make_pair(x, 2));
             }
             else{
-                pq.push(make_pair(-x, 0));
+                pq.push(make_pair(-x, 1));
             }
         }
     }
+
+    return 0;
 }
