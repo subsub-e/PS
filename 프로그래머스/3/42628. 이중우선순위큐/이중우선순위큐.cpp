@@ -1,45 +1,40 @@
 #include <string>
 #include <vector>
-#include <queue>
-#include <algorithm>
-#include <iostream>
+#include <set>
 using namespace std;
 
 vector<int> solution(vector<string> operations) {
     vector<int> answer;
-    int cnt = 0;
-    int nowSize = 0;
-    priority_queue<int> pq;
+    multiset<int> pq;
+    
+    
     for(int i = 0; i < operations.size(); i++){
-        if(operations[i] == "D 1"){
-            if(nowSize > 0){
-                pq.pop();
-                nowSize--;
-            }
-        }
-        else if(operations[i] == "D -1"){
-            if(nowSize > 0){
-                cnt++;
-                nowSize--;
-            }
+        string temp = operations[i];
+        if(temp[0] == 'I'){
+            pq.insert(stoi(operations[i].substr(2)));
         }
         else{
-            string temp = operations[i].substr(2);
-            pq.push(stoi(temp));
-            nowSize++;
+            if(temp[2] == '-'){
+                if(pq.size() > 0){
+                    pq.erase(pq.begin());
+                    
+                }
+            }
+            else{
+                if(pq.size() > 0){
+                    pq.erase(--pq.end());
+                }
+            }
         }
     }
     
-    if(pq.size() <= cnt){
-        answer.push_back(0);
-        answer.push_back(0);
+    if(pq.size() > 0){
+        answer.push_back(*--pq.end());
+        answer.push_back(*pq.begin());
         return answer;
     }
-    answer.push_back(pq.top());
-    while(pq.size() > cnt + 1){
-        //cout << pq.top() << ' ';
-        pq.pop();
-    }
-    answer.push_back(pq.top());
+    
+    answer.push_back(0);
+    answer.push_back(0);
     return answer;
 }
