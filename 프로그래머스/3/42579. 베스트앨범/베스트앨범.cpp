@@ -1,48 +1,58 @@
 #include <string>
 #include <vector>
-#include <unordered_map>
-#include <algorithm>
-#include <iostream>
 #include <tuple>
+#include <iostream>
+#include <algorithm>
+#include <unordered_map>
 using namespace std;
 
-unordered_map<string, int> m;
-vector<pair<string, int> > v;
-vector<tuple<string, int, int> > temp;
-
-bool comp(pair<string, int> p1, pair<string, int> p2){
-    return p1.second > p2.second;
+bool comp(pair<string, int> a, pair<string, int> b){
+    return a.second > b.second;
 }
 
-bool comp2(tuple<string, int, int> p1, tuple<string, int, int> p2){
-    return get<1>(p1) > get<1>(p2);
+bool comp2(tuple<int, int, string> a, tuple<int, int, string> b){
+    if(get<0>(a) == get<0>(b)){
+        return get<1>(a) < get<1>(b);
+    }
+    return get<0>(a) > get<0>(b);
 }
 
 vector<int> solution(vector<string> genres, vector<int> plays) {
     vector<int> answer;
+    unordered_map<string, int> m;
+    vector<tuple<int, int, string> > v;
+    
     for(int i = 0; i < genres.size(); i++){
         m[genres[i]] += plays[i];
-        temp.push_back(make_tuple(genres[i], plays[i], i));
+        v.push_back(make_tuple(plays[i], i, genres[i]));
     }
     
-    for(auto it : m){
-        v.push_back(make_pair(it.first, it.second));
-    }
     
-    sort(v.begin(), v.end(), comp);
+    vector<pair<string, int> > table(m.begin(), m.end());
     
-    sort(temp.begin(), temp.end(), comp2);
+    sort(table.begin(), table.end(), comp);
     
+    // for(int i = 0; i < table.size(); i++){
+    //     cout << table[i].first << ' ' << table[i].second << '\n';
+    // }
     
-    for(int i = 0; i < v.size(); i++){
+    sort(v.begin(), v.end(), comp2);
+    
+    // for(int i = 0; i < v.size(); i++){
+    //     cout << get<0>(v[i]) << ' ' << get<1>(v[i]) << ' ' << get<2>(v[i]) << '\n';
+    // }
+    
+    for(int i = 0; i < table.size(); i++){
         int cnt = 0;
-        for(int j = 0; j < temp.size(); j++){
-            if(get<0>(temp[j]) == v[i].first){
-                cnt++;
-                answer.push_back(get<2>(temp[j]));
-            }
-            if(cnt == 2){
+        for(int j = 0; j < v.size(); j++){
+            if(cnt >= 2){
                 break;
+            }
+            string temp = get<2>(v[j]);
+            // cout << table[i].first << ' ' << temp << ' ' << cnt << '\n';
+            if(table[i].first == temp){
+                cnt++;
+                answer.push_back(get<1>(v[j]));
             }
         }
     }
