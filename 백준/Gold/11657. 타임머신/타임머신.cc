@@ -6,8 +6,8 @@ using namespace std;
 
 int n, m;
 long long dist[510];
-vector<pair<int, pair<int, long long> > > v;
-const long long INF = 987654321;
+vector<pair<int, pair<int, int> > > v;
+const int INF = 1e9 + 10;
 
 int main(){
     cin >> n >> m;
@@ -25,7 +25,7 @@ int main(){
         for(int j = 0; j < v.size(); j++){
             int from = v[j].first;
             int to = v[j].second.first;
-            long long cost = v[j].second.second;
+            int cost = v[j].second.second;
 
             if(dist[from] == INF){
                 continue;
@@ -39,7 +39,7 @@ int main(){
     for(int i = 0; i < v.size(); i++){
         int from = v[i].first;
         int to = v[i].second.first;
-        long long cost = v[i].second.second;
+        int cost = v[i].second.second;
         if(dist[from] == INF){
             continue;
         }
