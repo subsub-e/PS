@@ -1,26 +1,43 @@
 #include <iostream>
 #include <string>
-#include <algorithm>
-#include <vector>
 
 using namespace std;
 
-int n, m, ans;
-string str;
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
 
-int main(){
-    cin >> n >> m >> str;
-    string target = "IOI";
+    int n, m;
+    cin >> n >> m;
 
-    for(int i = 2; i <= n; i++){
-        target += "OI";
-    }
+    string s;
+    cin >> s;
 
-    for(int i = 0; i <= str.length() - target.length(); i++){
-        if(str.substr(i, target.length()) == target){
-            //cout << str.substr(i, target.length()) << '\n';
-            ans++;
+    int ans = 0;
+    for (int i = 0; i < m; i++)
+    {
+        int k = 0;
+        
+        if (s[i] == 'O')
+            continue;
+        else
+        {
+            while (s[i + 1] == 'O' && s[i + 2] == 'I')
+            {
+                k++;
+                if (k == n)
+                {
+                    k--;
+                    ans++;
+                }
+                i += 2;
+            }
+            k = 0;
         }
     }
     cout << ans;
+
+    return 0;
 }
