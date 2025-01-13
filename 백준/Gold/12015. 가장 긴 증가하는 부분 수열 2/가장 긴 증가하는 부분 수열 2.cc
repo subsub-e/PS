@@ -4,38 +4,29 @@
 
 using namespace std;
 
-int main(){
-    int n; cin >> n;
-    vector<int> v;
-    for(int i = 0; i < n; i++){
-        int x; cin >> x;
-        v.push_back(x);
+int main() {
+    int n;
+    cin >> n;
+    vector<int> v(n);
+
+    for (int i = 0; i < n; i++) {
+        cin >> v[i];
     }
 
-    int ans = 0;
-    vector<int> LIS;
-    LIS.push_back(0);
-
-    for(int i = 0; i < n; i++){
-        if(LIS.back() < v[i]){
+    vector<int> LIS; // Longest Increasing Subsequence
+    for (int i = 0; i < n; i++) {
+        // LIS 배열에서 v[i]가 들어갈 위치를 찾음 (lower_bound 사용)
+        auto pos = lower_bound(LIS.begin(), LIS.end(), v[i]);
+        
+        if (pos == LIS.end()) {
+            // v[i]가 LIS의 가장 큰 값보다 크면 추가
             LIS.push_back(v[i]);
-        }
-        else{
-            int left = 0;
-            int right = LIS.size();
-
-            while(left < right){
-                int mid = (int) (left + right) / 2;
-                if(LIS[mid] < v[i]){
-                    left = mid + 1;
-                }
-                else{
-                    right = mid;
-                }
-            }
-            LIS[right] = v[i];
+        } else {
+            // 그렇지 않으면 기존 값을 대체
+            *pos = v[i];
         }
     }
 
-    cout << (int) LIS.size() - 1;
+    cout << LIS.size() << endl; // LIS 배열의 크기가 최장 증가 부분 수열의 길이
+    return 0;
 }
