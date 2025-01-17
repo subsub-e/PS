@@ -21,20 +21,6 @@ bool isLine(ll t1, ll t2, ll t3, ll t4){
     return (t1 <= t4 && t2 >= t3);
 }
 
-bool isLine(int a, int b, int c, int d)
-{
-    if (a > b) // b가 더 크게
-    {
-        swap(a, b);
-    }
-    if (c > d) // d가 더 크게
-    {
-        swap(c, d);
-    }
-    return (a <= d && b >= c) || (c <= b && d >= a); // 좌표의 대소 관계 확인
-}
-
-
 ll ccw(pair<ll, ll> a, pair<ll, ll> b, pair<ll, ll> c){
     pair<ll, ll> ca;
     pair<ll, ll> ab;
