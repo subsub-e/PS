@@ -20,11 +20,8 @@ void Union(int x, int y){
     int X = find(x);
     int Y = find(y);
 
-    if(X < Y){
+    if(X != Y){
         uf[Y] = X;
-    }
-    else{
-        uf[X] = Y;
     }
 }
 
@@ -33,7 +30,7 @@ bool comp(tuple<int, int, int, int> t1, tuple<int, int, int, int> t2){
     int j, x3, x4, h2;
     tie(i, x1, x2, h1) = t1;
     tie(j, x3, x4, h2) = t2;
-    if(x2 < x4){
+    if(x1 < x3){
         return true;
     }
     else{
@@ -61,14 +58,25 @@ int main(){
 
     sort(v.begin(), v.end(), comp);
 
-    for(int i = 0; i < v.size() - 1; i++){
-        int x, x1, x2, h1;
-        int t, t1, t2, h2;
-        tie(x, x1, x2, h1) = v[i];
-        tie(t, t1, t2, h2) = v[i + 1]; 
 
-        if(x2 >= t1){
-            Union(x, t);
+    int s1, s2, s3, s4;
+    tie(s1, s2, s3, s4) = v[0];
+    int s = s2;
+    int e = s3;
+    int now_index = s1;
+
+    for(int i = 1; i < v.size(); i++){
+        int t, t1, t2, h2;
+        tie(t, t1, t2, h2) = v[i]; 
+
+        if(t1 <= e){
+            Union(now_index, t);
+            e = max(e, t2);
+        }
+        else{
+            s = t1;
+            e = t2;
+            now_index = t;
         }
     }
 
