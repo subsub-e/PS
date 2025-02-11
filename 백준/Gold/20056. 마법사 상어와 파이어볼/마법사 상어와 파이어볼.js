@@ -16,16 +16,18 @@ for(let i = 0; i < m; i++){
   fireballs.push({r : k[0], c : k[1], m : k[2], s : k[3], d : k[4]});
 }
 
-
-function convert(pos) {
-  if (pos <= n && pos >= 0) {
-    if (pos === 0) return n;
-    return pos;
-  } else if (pos > n) {
-    if (pos % n === 0) return n;
-    return pos % n;
-  } else if (pos < 0) {
-    return n + (pos % n);
+function convert(value){
+  if(value < 0){
+    return n + (value % n);
+  }
+  else{
+    let temp = (value + n) % n;
+    if(temp === 0){
+      return n;
+    }
+    else{
+      return temp;
+    }
   }
 }
 
