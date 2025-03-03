@@ -1,26 +1,50 @@
 #include <string>
 #include <vector>
+#include <iostream>
 #include <algorithm>
+
 using namespace std;
 
-int solution(vector<vector<int>> scores)
-{
-    int answer = scores.size()+1, wanho=scores[0][0] + scores[0][1], size = scores.size();
-    for(auto c : scores)// 완호의 인센티브 자격 확인
-        if (scores[0][0] < c[0] && scores[0][1] < c[1]) return -1;
-    sort(scores.begin()+1, scores.end());//완호 점수를 제외하고 오름차순 정렬
-    for(int i=1;i<size;i++)
-    {
-        if (wanho >= scores[i][0] + scores[i][1]) continue;//최적화를 위해 완호점수가 해당 도합점수보다 크다면 넘긴다.
-        for(int j=i+1;j<size;j++)
-        {
-            if(scores[i][0] < scores[j][0] && scores[i][1] < scores[j][1])
-            {//도합점수는 완호보다 크지만 인센티브를 못받는 경우
-                answer--;//등수 올려줌
-                break;
-            }
+bool comp(vector<int> v1, vector<int> v2){
+    if(v1[0] == v2[0]){
+        return v1[1] > v2[1];
+    }
+    return v1[0] > v2[0];
+}
+
+int solution(vector<vector<int>> scores) {
+    int answer = 1;
+    int s1 = scores[0][0];
+    int s2 = scores[0][1];
+    int hap = scores[0][0] + scores[0][1];
+    
+    sort(scores.begin(), scores.end(), comp);
+    vector<vector<int> > v;
+    
+    v.push_back(scores[0]);
+    
+    int prvMax = 0;
+    int newMax = scores[0][1];
+    
+    for(int i = 1; i < scores.size(); i++){
+        if(scores[i-1][0] > scores[i][0]){
+            prvMax = newMax;
+        }
+        if(prvMax <= scores[i][1]){
+            v.push_back(scores[i]);
+            newMax = max(newMax, scores[i][1]);
+        }
+        
+    }
+    
+    for(int i = 0; i < v.size(); i++){
+        if(v[i][0] > s1 && v[i][1] > s2){
+            return -1;
+        }
+        if(hap < v[i][0] + v[i][1]){
+            answer++;
         }
     }
-    for(auto c : scores) if (wanho >= c[0] + c[1]) answer--;//완호가 점수 더 크거나 같다면 등수 올려줌
+    
     return answer;
 }
