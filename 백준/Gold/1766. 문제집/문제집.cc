@@ -1,48 +1,53 @@
 #include <iostream>
 #include <vector>
+#include <algorithm>
+#include <string>
 #include <queue>
 #include <cstring>
-#include <algorithm>
-#include <climits>
 #include <set>
+#include <tuple>
+#include <cmath>
 using namespace std;
 
 
 
-int main(){
+int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(0);
+    cout.tie(0);
 
     int n, m;
     cin >> n >> m;
-    vector<vector<int> > v(32001);
-    vector<int> indig(32001);
-    set<int> s;
+    vector<int> v[n + 1];
+    vector<int> indig(n + 1);
+    priority_queue<int, vector<int>, greater<int> > pq;
 
     for(int i = 0; i < m; i++){
-        int x1, x2;
-        cin >> x1 >> x2;
-        v[x1].push_back(x2);
-        indig[x2]++;
+        int x, y;
+        cin >> x >> y;
+        v[x].push_back(y);
+        indig[y]++;
     }
 
-    for(int i = n; i > 0; i--){
+    for(int i = 1; i <= n; i++){
         if(indig[i] == 0){
-            s.insert(i);
+            pq.push(i);
         }
     }
 
-    while(!s.empty()){
-        int cur = *s.begin();
-        s.erase(s.begin());
-        cout << cur << ' ';
-        for(auto next : v[cur]){
+    while(!pq.empty()){
+        int now = pq.top();
+        pq.pop();
+
+        cout << now << ' ';
+        for(auto next : v[now]){
             indig[next]--;
             if(indig[next] == 0){
-                s.insert(next);
+                pq.push(next);
             }
         }
     }
+
 
     return 0;
 }
