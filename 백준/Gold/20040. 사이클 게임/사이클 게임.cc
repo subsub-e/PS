@@ -1,15 +1,18 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
-
+#include <string>
+#include <queue>
+#include <cstring>
+#include <set>
+#include <tuple>
 using namespace std;
 
-int n, m;
 int uf[500001];
-vector<pair<int, int> > v;
+int n, m;
 
 int find(int x){
-    if(x == uf[x]){
+    if(uf[x] == x){
         return x;
     }
     return uf[x] = find(uf[x]);
@@ -18,35 +21,36 @@ int find(int x){
 void Union(int x, int y){
     int X = find(x);
     int Y = find(y);
-    if(X < Y){
-        uf[X] = Y;
+    if(X == Y){
+        return;
     }
-    else{
-        uf[Y] = X;
-    }
+    uf[X] = Y;
 }
 
-int main(){
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+
     cin >> n >> m;
-    for(int i = 1; i <= n; i++){
+
+    for(int i = 0; i < n; i++){
         uf[i] = i;
     }
 
-    for(int i = 0; i < m; i++){
-        int x1, x2;
-        cin >> x1 >> x2;
-        v.push_back({x1, x2});
-    }
-
-    for(int i = 0; i < (int) v.size(); i++){
-        if(find(v[i].first) == find(v[i].second)){
-            cout << i + 1;
+    for(int i = 1; i <= m; i++){
+        int x, y;
+        cin >> x >> y;
+        if(find(x) == find(y)){
+            cout << i;
             return 0;
         }
         else{
-            Union(v[i].first, v[i].second);
+            Union(x, y);
         }
+        //cout << uf[x] << ' ' << uf[y] << '\n';
     }
-
     cout << 0;
-}   
+    return 0;
+}
