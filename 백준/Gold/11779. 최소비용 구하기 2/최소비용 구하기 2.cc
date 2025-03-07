@@ -1,70 +1,77 @@
 #include <iostream>
-#include <algorithm>
-#include <cmath>
-#include <string>
 #include <vector>
-#include <climits>
-#include <cstring>
-#include <tuple>
+#include <algorithm>
+#include <string>
 #include <queue>
+#include <cstring>
+#include <set>
+#include <tuple>
 using namespace std;
 
-int n, m;
-vector<pair<int, int> > v[1001];
-int st, en;
-int d[1001];
-int pre[1001];
-const int INF = 1e9+10;
 
-int main(){
-	ios_base::sync_with_stdio(false);
-	cin.tie(NULL); cout.tie(NULL);
+int n, m, st, en;
+vector<pair<int, int> > v[1001];
+priority_queue<pair<int, int>, vector<pair<int, int> >, greater<pair<int, int> > > pq;
+int d[1001];
+int parent[1001];
+const int INF = 1e9 + 10;
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
 
     cin >> n >> m;
-    fill(d, d + 1 + n, INF);
+    fill(d, d + n + 1, INF);
+
+    
     while(m--){
-        int x, y, cost;
-        cin >> x >> y >> cost;
-        v[x].push_back(make_pair(cost, y));
+        int a, b, cost;
+        cin >> a >> b >> cost;
+        v[a].push_back({cost, b});
     }
 
     cin >> st >> en;
-    priority_queue<pair<int, int>, vector<pair<int, int> >, greater<pair<int, int> > > pq;
     d[st] = 0;
-    pq.push(make_pair(d[st], st));
+    pq.push({d[st], st});
+    
     while(!pq.empty()){
-        int cur_x = pq.top().first;
-        int cur_y = pq.top().second;
+        int now_cost = pq.top().first;
+        int now_point = pq.top().second;
         pq.pop();
 
-        if(d[cur_y] != cur_x){
+        if(d[now_point] != now_cost){
             continue;
         }
 
-        for(auto next : v[cur_y]){
-            if(d[next.second] <= d[cur_y] + next.first){
-                continue;
+        for(auto next : v[now_point]){
+            int next_cost = next.first;
+            int next_point = next.second;
+
+            if(d[next_point] > next_cost + d[now_point]){
+                d[next_point] = next_cost + d[now_point];
+                //cout << now_point << ' ' << next_point << ' ' << d[next_point] << '\n';
+                pq.push({d[next_point], next_point});
+                parent[next_point] = now_point;
             }
-            d[next.second] = d[cur_y] + next.first;
-            pq.push(make_pair(d[next.second], next.second));
-            pre[next.second] = cur_y;
         }
     }
 
-
     cout << d[en] << '\n';
-    vector<int> path;
-    int cur = en;
-    while(cur != st){
-        path.push_back(cur);
-        cur = pre[cur];
+
+    int now = en;
+    vector<int> answer;
+    while(now != st){
+        answer.push_back(now);
+        now = parent[now];
     }
-    path.push_back(cur);
-    cout << path.size() << '\n';
-    reverse(path.begin(), path.end());
-    for(int i = 0; i < path.size(); i++){
-        cout << path[i] << ' ';
+    answer.push_back(st);
+    cout << answer.size() << '\n';
+
+    reverse(answer.begin(), answer.end());
+    for(auto now : answer){
+        cout << now << ' '; 
     }
 
-	return 0;
+    return 0;
 }
