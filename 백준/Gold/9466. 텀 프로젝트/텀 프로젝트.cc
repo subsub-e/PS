@@ -1,55 +1,76 @@
 #include <iostream>
-#include <algorithm>
-#include <queue>
-#include <cstring>
 #include <vector>
+#include <cstring>
+#include <cmath>
+
 using namespace std;
 
-int n, m;
+int t, n, cnt;
 int arr[100001];
 bool visited[100001];
-bool finished[100001];
-int cnt = 0;
+bool finish[100001];
 
-void dfs(int now){
+void init()
+{
+    memset(visited, 0, sizeof(visited));
+    memset(finish, 0, sizeof(finish));
+    cnt = 0;
+}
+
+void dfs(int now)
+{
     visited[now] = 1;
+    int next = arr[now];
 
-    int next1 = arr[now];
-
-    if(!visited[next1]){
-        dfs(next1);
+    if (!visited[next])
+    {
+        dfs(next);
     }
-    else{
-        if(!finished[next1]){
-            for(int i = next1; i != now; i = arr[i]){
+    else
+    {
+        if (!finish[next])
+        {
+            while (next != now)
+            {
                 cnt++;
+                next = arr[next];
             }
             cnt++;
         }
     }
-    finished[now] = 1;
+    finish[now] = 1;
+}
+
+void simulate()
+{
+    init();
+    cin >> n;
+    for (int i = 0; i < n; i++)
+    {
+        int x;
+        cin >> x;
+        arr[i] = x - 1;
+    }
+
+    for (int i = 0; i < n; i++)
+    {
+        if (!visited[i])
+        {
+            dfs(i);
+        }
+    }
+    cout << n - cnt << '\n';
 }
 
 int main()
 {
-    cin.tie(0);
     ios_base::sync_with_stdio(false);
-    cin >> n;
-    for(int i = 0; i < n; i++){
-        cin >> m;
-        cnt = 0;
-        for(int j = 1; j <= m; j++){
-            cin >> arr[j];
-        }
-        for(int j = 1; j <= m; j++){
-            if(!visited[j]){
-                dfs(j);
-            }
-        }
+    cin.tie(0);
+    cout.tie(0);
 
-        cout << m - cnt << '\n';
-        memset(visited, false, sizeof(visited));
-        memset(finished, false, sizeof(finished));
+    cin >> t;
+    while (t--)
+    {
+        simulate();
     }
-    return 0;
 }
