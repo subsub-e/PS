@@ -60,8 +60,8 @@ int main()
 
         if (simulate(mid))
         {
-            en = mid - 1;
             answer = mid;
+            en = mid - 1;
         }
         else
         {
