@@ -1,81 +1,65 @@
 #include <iostream>
+#include <vector>
+#include <cstring>
+#include <cmath>
 #include <string>
-using namespace std;
-int min(int a,int b){
-    if(a<b){
-        return a;
-    }
-    else{
-        return b;
-    }
-}
+#include <unordered_set>
 
-int max(int a,int b){
-    if(a>b){
-        return a;
-    }
-    else{
-return b;}
-}
-int main(void){
-    string arr[20001];
-    int n;
-    int max_size = 0;
-    int l = n;
-    int r = n;
+using namespace std;
+
+unordered_set<string> tab;
+int n;
+vector<string> v;
+
+int max_size = 0;
+int l, r;
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
 
     cin >> n;
-    for(int i = 0;i<n;i++){
-        cin >> arr[i];
-
+    for (int i = 0; i < n; i++)
+    {
+        string str;
+        cin >> str;
+        v.push_back(str);
     }
 
-    for(int i = 0;i<n;i++){
-        for(int j = i+1;j<n;j++){
-            if(arr[i] == arr[j]){
+    for (int i = 0; i < v.size(); i++)
+    {
+        for (int j = i + 1; j < v.size(); j++)
+        {
+            if (v[i] == v[j])
+            {
                 continue;
             }
-            int length = min(arr[i].size(),arr[j].size());
-            if(length == arr[i].size()){
-                int temp = 0;
-                for(int k = 0;k<arr[i].size();k++){
-                    if(arr[i][k] != arr[j][k]){
-                        break;
-                    }
+
+            int len = min(v[i].size(), v[j].size());
+            int temp = 0;
+
+            for (int k = 0; k < len; k++)
+            {
+                if (v[i][k] == v[j][k])
+                {
                     temp++;
                 }
-
-                if(temp > max_size){
-                    max_size = temp;
-                    l = i;
-                    r = j;
+                else
+                {
+                    break;
                 }
-
             }
-           else if(length == arr[j].size()){
-               int temp = 0;
-               for(int k = 0;k<arr[j].size();k++){
-                   if(arr[i][k] != arr[j][k]){
-                       break;
-                   }
-                   temp++;
-
-               }
-
-               if(temp > max_size){
-                   max_size = temp;
-                   l = i;
-                   r = j;
-               }
-
-           }                  
-
+            if (max_size < temp)
+            {
+                l = i;
+                r = j;
+                max_size = temp;
+            }
         }
     }
-     int small = min(l,r);
-     int big = max(l,r);
 
-    cout << arr[small] << '\n';
-     cout << arr[big];
-
+    cout << v[l] << '\n'
+         << v[r];
 }
